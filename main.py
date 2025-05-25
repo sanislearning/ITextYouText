@@ -1,3 +1,4 @@
+#Simple script version of the project
 import re
 from collections import defaultdict
 def parse_whatsapp_chat(file_path):
