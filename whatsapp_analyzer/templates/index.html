@@ -1,68 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <head>
     <meta charset="UTF-8">
     <title>WhatsApp Chat Analyzer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
-</head>
 <body>
-    <h1>Upload your exported WhatsApp Chat file (.txt)</h1>
-    
-    <!-- Upload form -->
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="chatfile" accept=".txt" required>
-        <button type="submit">Analyze</button>
-    </form>
+    <div class="container">
+        <h1>📈 WhatsApp Chat Analyzer</h1>
 
-    {% if chat_info %}
-        <h2>Chat Statistics</h2>
+        <!-- File upload form -->
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="chatfile" accept=".txt" required>
+            <button type="submit">Analyze</button>
+        </form>
 
-        <!-- Chart container -->
-        <canvas id="chatChart" width="600" height="400"></canvas>
+        {% if chat_info %}
+            <h2>Chat Statistics</h2>
+            <canvas id="chatChart" width="600" height="400"></canvas>
 
-        <script>
-            const ctx = document.getElementById('chatChart').getContext('2d');
-            const chatChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: {{ chat_info.labels | tojson }},
-                    datasets: [
-                        {
-                            label: 'Messages Sent',
-                            data: {{ chat_info.messages | tojson }},
-                            backgroundColor: 'rgba(54, 162, 235, 0.7)'
-                        },
-                        {
-                            label: 'Avg. Words per Message',
-                            data: {{ chat_info.avg_words | tojson }},
-                            backgroundColor: 'rgba(255, 99, 132, 0.7)'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'WhatsApp Chat Activity'
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false
-                        }
+            <script>
+                const ctx = document.getElementById('chatChart').getContext('2d');
+                const chatChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ chat_info.labels | tojson }},
+                        datasets: [
+                            {
+                                label: 'Messages Sent',
+                                data: {{ chat_info.messages | tojson }},
+                                backgroundColor: 'rgba(34, 139, 230, 0.6)',
+                                borderRadius: 8
+                            },
+                            {
+                                label: 'Avg. Words per Message',
+                                data: {{ chat_info.avg_words | tojson }},
+                                backgroundColor: 'rgba(240, 128, 128, 0.6)',
+                                borderRadius: 8
+                            }
+                        ]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'WhatsApp Chat Activity',
+                                font: {
+                                    size: 18,
+                                    family: 'Poppins'
+                                }
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
                         }
                     }
-                }
-            });
-        </script>
-    {% endif %}
+                });
+            </script>
+        {% endif %}
+    </div>
 </body>
 </html>
