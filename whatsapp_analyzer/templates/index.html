@@ -2,10 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ Added -->
     <title>WhatsApp Chat Analyzer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div class="container">
         <h1>📈 WhatsApp Chat Analyzer</h1>
@@ -18,7 +20,10 @@
 
         {% if chat_info %}
             <h2>Chat Statistics</h2>
-            <canvas id="chatChart" width="600" height="400"></canvas>
+            <div class="chart-container">
+                <canvas id="chatChart"></canvas>
+            </div>
+            
 
             <script>
                 const ctx = document.getElementById('chatChart').getContext('2d');
