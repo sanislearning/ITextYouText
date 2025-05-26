@@ -32,7 +32,11 @@ def parse_whatsapp_chat(file_path):
             'avg_words':round(avg_words,2)
         }
 
-    return result
+    return {
+        'labels':list(result.keys()),
+        'messages':[v['message'] for v in result.values()],
+        'avg_words': [v['avg_words'] for v in result.values()]
+    }
 
 # Route for the home page ("/") with both GET and POST methods
 @app.route('/', methods=['GET', 'POST'])

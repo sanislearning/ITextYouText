@@ -1,28 +1,68 @@
 <!DOCTYPE html>
 <html>
+<head>
     <head>
-        <title>WhatsApp Chat Analyzer</title>
-    </head>
-    <body>
-        <h1>Upload your exported WhatsApp Chat file (.txt)</h1>
-        <!-- This form uploads the text file-->
-        <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="chatfile" accept=".txt" required>
-            <button type="submit">Analyze</button>
-        </form>
+    <meta charset="UTF-8">
+    <title>WhatsApp Chat Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 
-        <!--This is the Jinja2 part, Flask uses it to generate HTML pages with dynamic content-->
-        {% if chat_info %} 
-            <h2>Chat Statistics</h2>
-            <ul>
-                {% for sender, stats in chat_info.items() %}
-                    <li>
-                        <strong>{{sender}}</strong>:
-                        {{stats.message}} messages,
-                        average {{stats.avg_words}} words per message
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </body>
+</head>
+<body>
+    <h1>Upload your exported WhatsApp Chat file (.txt)</h1>
+    
+    <!-- Upload form -->
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="chatfile" accept=".txt" required>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if chat_info %}
+        <h2>Chat Statistics</h2>
+
+        <!-- Chart container -->
+        <canvas id="chatChart" width="600" height="400"></canvas>
+
+        <script>
+            const ctx = document.getElementById('chatChart').getContext('2d');
+            const chatChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: {{ chat_info.labels | tojson }},
+                    datasets: [
+                        {
+                            label: 'Messages Sent',
+                            data: {{ chat_info.messages | tojson }},
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                        },
+                        {
+                            label: 'Avg. Words per Message',
+                            data: {{ chat_info.avg_words | tojson }},
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'WhatsApp Chat Activity'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    {% endif %}
+</body>
 </html>
