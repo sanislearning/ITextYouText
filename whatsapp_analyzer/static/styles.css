@@ -87,3 +87,10 @@ canvas {
         font-size: 0.95em;
     }
 }
+
+.instructions-title {
+    font-size: 1em;
+    font-weight: 600;
+    color: #007bff;
+    margin-bottom: 10px;
+}
