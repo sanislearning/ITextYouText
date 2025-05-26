@@ -9,20 +9,30 @@ from flask import Flask, render_template, request  # Flask tools
 # Create a Flask web application instance
 app = Flask(__name__)
 
-# Function to parse the WhatsApp chat file and count messages by each sender
 def parse_whatsapp_chat(file_path):
-    # Pattern to detect message lines in the format: date, time - name: message
-    pattern = r'^(\d{1,2}/\d{1,2}/\d{2,4}), \d{1,2}:\d{2}\s?(?:AM|PM)? - (.*?):'
-    counts = defaultdict(int)  # Dictionary to store message counts
+    pattern = r'^(\d{1,2}/\d{1,2}/\d{2,4}), \d{1,2}:\d{2}\s?(?:AM|PM)? - (.*?): (.+)'
+    message_counts=defaultdict(int)
+    total_words=defaultdict(int)
 
-    # Open and read the chat file
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path,'r',encoding='utf-8') as f:
         for line in f:
-            match = re.match(pattern, line)  # Check if the line matches the WhatsApp format
+            match=re.match(pattern,line)
             if match:
-                sender = match.group(2)  # Extract the sender's name
-                counts[sender] += 1  # Increment their message count
-    return dict(counts)  # Convert defaultdict to a normal dictionary and return it
+                sender=match.group(2)
+                message=match.group(3)
+                message_counts[sender]+=1
+                word_count=len(message.split()) #Splits messages by space to count words
+                total_words[sender]+=word_count
+
+    result={}
+    for sender in message_counts:
+        avg_words=total_words[sender]/message_counts[sender]
+        result[sender]={
+            'message':message_counts[sender],
+            'avg_words':round(avg_words,2)
+        }
+
+    return result
 
 # Route for the home page ("/") with both GET and POST methods
 @app.route('/', methods=['GET', 'POST'])
