@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WhatsApp Chat Analyzer</title>
+    </head>
+    <body></body>
+        <h1>Upload your exported WhatsApp Chat file (.txt)</h1>
+        <!-- This form uploads the text file-->
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="chatfile" accept=".txt" required>
+            <button type="submit">Analyze</button>
+        </form>
+        <!--This is the Jinja2 part, Flask uses it to generate HTML pages with dynamic content-->
+        {% if chat_info %} 
+            <h2>Message Count</h2>
+            <ul>
+                {% for sender, count in chat_info.items() %}
+                    <li><strong>{{sender}}</strong>:{{count}} messages</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </body>
+</html>
