@@ -19,6 +19,7 @@ Built with simplicity and mobile responsiveness in mind.
 ---
 
 ## 📂 Project Structure
+```
 ITextYouText/
 ├── whatsapp_analyzer/
 │ ├── static/
@@ -31,7 +32,7 @@ ITextYouText/
 │ └── .gitignore
 ├── README.md
 ├── main.py
-
+```
 
 ---
 
